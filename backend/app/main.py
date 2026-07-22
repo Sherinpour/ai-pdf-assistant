@@ -1,14 +1,12 @@
 from fastapi import FastAPI
 
+from app.api.upload import router as upload_router
+
 app = FastAPI(title="AI PDF Assistant")
 
+app.include_router(upload_router)
 
-@app.get("/health")
-def health_check():
-    return {"status": "ok"}
 
 @app.get("/")
-async def root():
-    return {
-        "message": "AI PDF Assistant API is running"
-    }
+def root():
+    return {"message": "AI PDF Assistant API"}
