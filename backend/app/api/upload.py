@@ -2,6 +2,7 @@ from pathlib import Path
 
 from fastapi import APIRouter, File, HTTPException, UploadFile
 
+from app.services.chunk_service import chunk_pages
 from app.services.pdf_service import extract_pdf
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
@@ -34,9 +35,15 @@ async def upload_pdf(file: UploadFile = File(...)):
         file_path.unlink(missing_ok=True)
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
+    chunks = chunk_pages(pages)
+
+    embeddings = embedding_service.embed(chunks)
+
+    vector_store.add(chunks, embeddings)
+
     return {
         "filename": filename,
         "status": "uploaded",
         "page_count": len(pages),
-        "pages": [page.model_dump() for page in pages],
+        "chunk_count": len(chunks),
     }
