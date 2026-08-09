@@ -1,15 +1,29 @@
-from sentence_transformers import SentenceTransformer
-
-MODEL_NAME = "BAAI/bge-m3"
-
-embedding_model = SentenceTransformer(MODEL_NAME)
+import requests
 
 
-def generate_embedding(text: str) -> list[float]:
-    embedding = embedding_model.encode(text)
-    return embedding.tolist()
+OLLAMA_EMBED_URL = "http://localhost:11434/api/embeddings"
+EMBEDDING_MODEL = "nomic-embed-text"
+
+
+def create_embedding(text: str) -> list[float]:
+    response = requests.post(
+        OLLAMA_EMBED_URL,
+        json={
+            "model": EMBEDDING_MODEL,
+            "prompt": text,
+        },
+        timeout=120,
+    )
+
+    response.raise_for_status()
+
+    data = response.json()
+
+    return data["embedding"]
 
 
 def generate_embeddings(texts: list[str]) -> list[list[float]]:
-    embeddings = embedding_model.encode(texts)
-    return embeddings.tolist()
+    return [
+        create_embedding(text)
+        for text in texts
+    ]
