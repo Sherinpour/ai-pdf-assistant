@@ -39,3 +39,6 @@ htmlcov/
 uploads/
 *.pdf
 !**/fixtures/**/*.pdf
+
+chroma_db/
+uploads/

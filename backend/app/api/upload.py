@@ -4,6 +4,8 @@ from fastapi import APIRouter, File, HTTPException, UploadFile
 
 from app.services.chunk_service import chunk_pages
 from app.services.pdf_service import extract_pdf
+from app.services.embedding_service import generate_embeddings
+from app.services.vector_store import vector_store
 
 router = APIRouter(prefix="/upload", tags=["Upload"])
 
@@ -37,7 +39,9 @@ async def upload_pdf(file: UploadFile = File(...)):
 
     chunks = chunk_pages(pages)
 
-    embeddings = embedding_service.embed(chunks)
+    texts = [chunk.text for chunk in chunks]
+
+    embeddings = generate_embeddings(texts)
 
     vector_store.add(chunks, embeddings)
 

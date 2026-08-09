@@ -211,3 +211,4 @@ widgetsnbextension==4.0.14
 wrapt==2.0.1
 wsproto==1.2.0
 yarl==1.24.5
+python-dotenv
