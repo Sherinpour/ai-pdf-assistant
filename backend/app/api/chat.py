@@ -15,4 +15,11 @@ def chat_with_pdf(request: ChatRequest):
     return chat(
         question=request.question,
         top_k=request.top_k,
+        history=[
+            {
+                "role": message.role,
+                "content": message.content,
+            }
+            for message in request.history
+        ],
     )
