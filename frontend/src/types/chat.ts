@@ -15,9 +15,18 @@ export interface ChatSource {
   distance: number
 }
 
+export interface ChatTimings {
+  retrieve_s: number
+  prompt_s: number
+  llm_s: number
+  total_s: number
+}
+
 export interface ChatResponse {
   answer: string
   sources: ChatSource[]
+  found?: boolean
+  timings?: ChatTimings
 }
 
 export interface UiChatMessage {
@@ -25,5 +34,6 @@ export interface UiChatMessage {
   role: 'user' | 'assistant'
   content: string
   sources?: ChatSource[]
+  found?: boolean
   createdAt: string
 }

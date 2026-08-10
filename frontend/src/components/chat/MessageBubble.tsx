@@ -7,6 +7,10 @@ interface MessageBubbleProps {
 
 export function MessageBubble({ message }: MessageBubbleProps) {
   const isUser = message.role === 'user'
+  const showSources =
+    !isUser &&
+    message.found !== false &&
+    Boolean(message.sources && message.sources.length > 0)
 
   return (
     <div className={cn('flex w-full', isUser ? 'justify-end' : 'justify-start')}>
@@ -20,14 +24,17 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
 
-        {!isUser && message.sources && message.sources.length > 0 && (
+        {showSources && (
           <div className="mt-3 border-t border-border/70 pt-2">
             <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
               Sources
             </p>
             <ul className="space-y-1">
-              {message.sources.map((source, index) => (
-                <li key={`${source.source}-${source.page}-${index}`} className="text-xs text-muted-foreground">
+              {message.sources!.map((source, index) => (
+                <li
+                  key={`${source.source}-${source.page}-${index}`}
+                  className="text-xs text-muted-foreground"
+                >
                   {source.source} · page {source.page}
                 </li>
               ))}

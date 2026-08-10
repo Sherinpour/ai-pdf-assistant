@@ -52,7 +52,8 @@ export function ChatPage() {
         id: createId(),
         role: 'assistant',
         content: response.answer,
-        sources: response.sources,
+        sources: response.found === false ? [] : response.sources,
+        found: response.found,
         createdAt: new Date().toISOString(),
       }
 
