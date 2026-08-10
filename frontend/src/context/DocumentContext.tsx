@@ -54,6 +54,18 @@ export function DocumentProvider({ children }: { children: ReactNode }) {
     setMessagesByDoc((prev) => ({ ...prev, [chatKey]: [] }))
   }, [chatKey])
 
+  const removeDocument = useCallback(
+    (id: string) => {
+      setMessagesByDoc((prev) => {
+        const next = { ...prev }
+        delete next[id]
+        return next
+      })
+      docs.removeDocument(id)
+    },
+    [docs],
+  )
+
   const value = useMemo(
     () => ({
       documents: docs.documents,
@@ -61,7 +73,7 @@ export function DocumentProvider({ children }: { children: ReactNode }) {
       selectedId: docs.selectedId,
       addDocument: docs.addDocument,
       selectDocument: docs.selectDocument,
-      removeDocument: docs.removeDocument,
+      removeDocument,
       messages,
       setMessages,
       clearChat,
@@ -74,7 +86,7 @@ export function DocumentProvider({ children }: { children: ReactNode }) {
       docs.selectedId,
       docs.addDocument,
       docs.selectDocument,
-      docs.removeDocument,
+      removeDocument,
       messages,
       setMessages,
       clearChat,

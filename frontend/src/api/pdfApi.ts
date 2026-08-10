@@ -1,5 +1,5 @@
 import { apiClient } from '@/api/client'
-import type { UploadPdfResponse } from '@/types/pdf'
+import type { DeletePdfResponse, UploadPdfResponse } from '@/types/pdf'
 
 export async function uploadPdf(
   file: File,
@@ -18,5 +18,12 @@ export async function uploadPdf(
     },
   })
 
+  return data
+}
+
+export async function deletePdf(filename: string): Promise<DeletePdfResponse> {
+  const { data } = await apiClient.delete<DeletePdfResponse>(
+    `/upload/${encodeURIComponent(filename)}`,
+  )
   return data
 }

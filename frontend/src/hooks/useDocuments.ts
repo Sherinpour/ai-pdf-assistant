@@ -41,13 +41,15 @@ export function useDocuments() {
   }, [])
 
   const removeDocument = useCallback((id: string) => {
-    setDocuments((prev) => prev.filter((doc) => doc.id !== id))
-    setSelectedId((current) => {
-      if (current !== id) return current
-      const remaining = documents.filter((doc) => doc.id !== id)
-      return remaining[0]?.id ?? null
+    setDocuments((prev) => {
+      const remaining = prev.filter((doc) => doc.id !== id)
+      setSelectedId((current) => {
+        if (current !== id) return current
+        return remaining[0]?.id ?? null
+      })
+      return remaining
     })
-  }, [documents])
+  }, [])
 
   const selectedDocument = documents.find((doc) => doc.id === selectedId) ?? null
 
